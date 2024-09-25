@@ -2,16 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Coin Animation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 0; /* Убираем отступы */
-            background-color: #f0f0f0; /* Light gray background */
+            margin: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Высота на 100% экрана */
         }
 
         @keyframes slideme {
@@ -34,76 +38,52 @@
             position: relative;
             background-color: #3498db;
             color: white;
-            padding: 10px 20px;
+            padding: 1.5vw 3vw; /* Используйте vw для адаптивности */
             border: none;
             border-radius: 5px;
-            font-size: 30px;
+            font-size: 5vw; /* Адаптивный размер текста */
             cursor: pointer;
-            margin-top: 20px; /* Отступ сверху для кнопки */
+            margin-top: 20px;
         }
 
-        .btn-new:after {
-            content: "";
-            display: block;
-            width: 30px;
-            height: 200px;
-            margin-left: 60px;
-            background: #fff;
-            opacity: 0.5;
-            position: absolute;
-            left: -40px;
-            top: -100px;
-            z-index: 1;
-            transform: rotate(45deg);
-            transition: all 0.1s;
-            animation-name: slideme;
-            animation-duration: 3s;
-            animation-delay: 0.05s;
-            animation-timing-function: ease-in-out;
-            animation-iteration-count: infinite;
-        }
-
-        /* Coin styles */
         .coin {
             position: absolute;
-            width: 40px; /* Increased size for better visibility */
-            height: 40px; /* Increased size for better visibility */
-            background-color: #f39c12; /* Gold color */
+            width: 10vw; /* Используйте vw для адаптивности */
+            height: 10vw; /* Используйте vw для адаптивности */
+            background-color: #f39c12;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white; /* Text color */
-            font-weight: bold; /* Bold text */
-            font-size: 14px; /* Adjust font size */
+            color: white;
+            font-weight: bold;
+            font-size: 3vw; /* Адаптивный размер текста */
             opacity: 0;
             animation: none;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add shadow for better visibility */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
-        /* Coin animation */
         @keyframes shootCoins {
             0% {
                 transform: translateY(0) scale(0.5);
                 opacity: 1;
             }
             100% {
-                transform: translateY(180px) scale(1); /* Измените значение, чтобы монеты падали в мешок */
+                transform: translateY(180px) scale(1);
                 opacity: 0;
             }
         }
 
-        /* Styles for the bag image */
         .bag {
-            width: 100vw; /* Полная ширина экрана */
-            height: 200px; /* Высота изображения, можно настроить */
-            background-image: url('bag_with_gold.png'); /* Путь к изображению мешка */
-            background-size: contain; /* Масштабирование изображения для заполнения блока */
-            background-position: center; /* Центрирование изображения */
+            width: 80vw; /* Используйте vw для адаптивности */
+            height: 25vh; /* Используйте vh для адаптивности */
+            background-image: url('bag_with_gold.png');
+            background-size: contain;
+            background-position: center;
             background-repeat: no-repeat;
-            margin: 170px auto; /* Отступ сверху */
-            position: relative; /* Необходимо для абсолютного позиционирования монет */
-            overflow: hidden; /* Прятать монеты, которые выходят за пределы мешка */
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
         }
 
         footer {
@@ -114,24 +94,18 @@
             background-color: #3498db;
             color: white;
             text-align: center;
-            padding: 20px 0;
+            padding: 2vw 0; /* Используйте vw для адаптивности */
+            font-size: 3vw; /* Адаптивный размер текста */
         }
-
-        .Main {
-            width: 100%;
-            text-align: center;
     </style>
 </head>
-<body class="Main">
-    <h1>Just press the</h1>
+<body>
+    <h1 style="font-size: 5vw;">Just press the</h1>
     <button class="btn-new" id="btnNew" onclick="triggerCoinAnimation()">BUTTON</button>
+    <h2 style="font-size: 4vw;">to be eligible</h2>
 
-    <h2>to be eligible</h2>
-
-    <!-- Bag image container -->
     <div class="bag" id="bag"></div>
 
-    <!-- Container for coins -->
     <div class="coins-container">
         <div class="coin">$XF</div>
         <div class="coin">$XF</div>
@@ -146,35 +120,30 @@
     <script>
         function triggerCoinAnimation() {
             const coins = document.querySelectorAll('.coin');
-            const bag = document.getElementById('bag');
             const button = document.getElementById('btnNew');
-            const buttonRect = button.getBoundingClientRect(); // Получаем позицию кнопки
+            const buttonRect = button.getBoundingClientRect();
 
             coins.forEach((coin, index) => {
-                coin.style.opacity = 1; // Показать монеты, когда начинается анимация
+                coin.style.opacity = 1;
                 coin.style.animation = `shootCoins 1s forwards ${index * 0.1}s ease-out`;
 
-                // Задаем положение монет, чтобы они падали из кнопки
-                const coinLeft = buttonRect.left + (buttonRect.width / 2) - 20; // Положение по X (центр кнопки)
-                coin.style.left = `${coinLeft + (Math.random() * 40 - 20)}px`; // Случайное смещение по X
-                coin.style.top = `${buttonRect.top + buttonRect.height}px`; // Задаем начальное положение Y (ниже кнопки)
+                const coinLeft = buttonRect.left + (buttonRect.width / 2) - 20;
+                coin.style.left = `${coinLeft + (Math.random() * 40 - 20)}px`;
+                coin.style.top = `${buttonRect.bottom}px`;
 
-                // Устанавливаем анимацию
-                coin.style.transform = `translateY(0) scale(0.5)`; // Начальное состояние
-                coin.offsetHeight; // Принудительно перерисовываем элемент, чтобы анимация заработала
-                coin.style.transform = `translateY(180px) scale(1)`; // Конечное состояние
+                coin.style.transform = `translateY(0) scale(0.5)`;
+                coin.offsetHeight;
+                coin.style.transform = `translateY(180px) scale(1)`;
             });
 
-            // Перенаправление на новую страницу после завершения анимации
             setTimeout(() => {
                 goToNewPage();
-            }, 1500); // Задержка 1.5 секунды, чтобы дожить до завершения анимации
+            }, 1500);
         }
 
         function goToNewPage() {
-            window.location.href = "secondpage.html"; // Замените на нужный вам URL
+            window.location.href = "secondpage.html";
         }
     </script>
-
 </body>
 </html>
