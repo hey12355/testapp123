@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mini App</title>
+    <style>
+        /* Основные стили для body и html */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Контейнер для всей страницы */
+        .container {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between; /* Размещаем контент и футер в разных частях */
+            min-height: 100vh; /* Минимальная высота экрана */
+        }
+
+        /* Стили для контента */
+        .content {
+            flex-grow: 1; /* Контент занимает доступное пространство */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Центрирование контента */
+            align-items: center;
+        }
+
+        /* Кнопка */
+        .btn-new {
+            position: relative;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .btn-new:after {
+            content: "";
+            display: block;
+            width: 30px;
+            height: 200px;
+            margin-left: 60px;
+            background: #fff;
+            opacity: 0.5;
+            position: absolute;
+            left: -40px;
+            top: -100px;
+            z-index: 1;
+            transform: rotate(45deg);
+            animation: slideme 3s ease-in-out infinite;
+        }
+
+        @keyframes slideme {
+            0% { left: -30px; margin-left: 0; }
+            30% { left: 110%; margin-left: 80px; }
+            100% { left: 110%; margin-left: 80px; }
+        }
+
+        /* Стиль мешка */
+        .bag {
+            width: 100vw;
+            height: 200px;
+            background-image: url('bag_with_gold.png');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Монеты */
+        .coin {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: #f39c12;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            opacity: 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes shootCoins {
+            0% { transform: translateY(0) scale(0.5); opacity: 1; }
+            100% { transform: translateY(180px) scale(1); opacity: 0; }
+        }
+
+        /* Футер */
+        footer {
+            background-color: #3498db;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            flex-shrink: 0; /* Не сжимается */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Основной контент -->
+        <div class="content">
+            <h1>Just press the</h1>
+            <button class="btn-new" id="btnNew" onclick="triggerCoinAnimation()">BUTTON</button>
+            <h2>to be eligible</h2>
+
+            <!-- Мешок -->
+            <div class="bag" id="bag"></div>
+
+            <!-- Монеты -->
+            <div class="coins-container">
+                <div class="coin">$XF</div>
+                <div class="coin">$XF</div>
+                <div class="coin">$XF</div>
+                <div class="coin">$XF</div>
+            </div>
+        </div>
+
+        <!-- Футер -->
+        <footer>
+            <p>You don't have to do anything more</p>
+        </footer>
+    </div>
+
+    <script>
+        function triggerCoinAnimation() {
+            const coins = document.querySelectorAll('.coin');
+            const button = document.getElementById('btnNew');
+            const buttonRect = button.getBoundingClientRect(); // Позиция кнопки
+
+            coins.forEach((coin, index) => {
+                coin.style.opacity = 1;
+                coin.style.animation = `shootCoins 1s forwards ${index * 0.1}s ease-out`;
+
+                const coinLeft = buttonRect.left + (buttonRect.width / 2) - 20; // Центр кнопки
+                coin.style.left = `${coinLeft + (Math.random() * 40 - 20)}px`; // Смещение по X
+                coin.style.top = `${buttonRect.top + buttonRect.height}px`; // Смещение по Y
+
+                coin.style.transform = `translateY(0) scale(0.5)`; // Начальное состояние
+                coin.offsetHeight; // Принудительно перерисовываем элемент
+                coin.style.transform = `translateY(180px) scale(1)`; // Конечное состояние
+            });
+
+            // Перенаправление на новую страницу
+            setTimeout(() => {
+                goToNewPage();
+            }, 1500);
+        }
+
+        function goToNewPage() {
+            window.location.href = "secondpage.html"; // Перенаправление
+        }
+    </script>
+</body>
+</html>
