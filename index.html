@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0; /* Убираем отступы */
+            background-color: #f0f0f0; /* Light gray background */
+        }
+
+        @keyframes slideme {
+            0% {
+                left: -30px;
+                margin-left: 0px;
+            }
+            30% {
+                left: 110%;
+                margin-left: 80px;
+            }
+            100% {
+                left: 110%;
+                margin-left: 80px;
+            }
+        }
+
+        .btn-new {
+            overflow: hidden;
+            position: relative;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 30px;
+            cursor: pointer;
+            margin-top: 20px; /* Отступ сверху для кнопки */
+        }
+
+        .btn-new:after {
+            content: "";
+            display: block;
+            width: 30px;
+            height: 200px;
+            margin-left: 60px;
+            background: #fff;
+            opacity: 0.5;
+            position: absolute;
+            left: -40px;
+            top: -100px;
+            z-index: 1;
+            transform: rotate(45deg);
+            transition: all 0.1s;
+            animation-name: slideme;
+            animation-duration: 3s;
+            animation-delay: 0.05s;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+        }
+
+        /* Coin styles */
+        .coin {
+            position: absolute;
+            width: 40px; /* Increased size for better visibility */
+            height: 40px; /* Increased size for better visibility */
+            background-color: #f39c12; /* Gold color */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white; /* Text color */
+            font-weight: bold; /* Bold text */
+            font-size: 14px; /* Adjust font size */
+            opacity: 0;
+            animation: none;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add shadow for better visibility */
+        }
+
+        /* Coin animation */
+        @keyframes shootCoins {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(180px) scale(1); /* Измените значение, чтобы монеты падали в мешок */
+                opacity: 0;
+            }
+        }
+
+        /* Styles for the bag image */
+        .bag {
+            width: 100vw; /* Полная ширина экрана */
+            height: 200px; /* Высота изображения, можно настроить */
+            background-image: url('bag_with_gold.png'); /* Путь к изображению мешка */
+            background-size: contain; /* Масштабирование изображения для заполнения блока */
+            background-position: center; /* Центрирование изображения */
+            background-repeat: no-repeat;
+            margin: 170px auto; /* Отступ сверху */
+            position: relative; /* Необходимо для абсолютного позиционирования монет */
+            overflow: hidden; /* Прятать монеты, которые выходят за пределы мешка */
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .Main {
+            width: 100%;
+            text-align: center;
+    </style>
+</head>
+<body class="Main">
+    <h1>Just press the</h1>
+    <button class="btn-new" id="btnNew" onclick="triggerCoinAnimation()">BUTTON</button>
+
+    <h2>to be eligible</h2>
+
+    <!-- Bag image container -->
+    <div class="bag" id="bag"></div>
+
+    <!-- Container for coins -->
+    <div class="coins-container">
+        <div class="coin">$XF</div>
+        <div class="coin">$XF</div>
+        <div class="coin">$XF</div>
+        <div class="coin">$XF</div>
+    </div>
+
+    <footer>
+        <p>You don't have to do anything more</p>
+    </footer>
+
+    <script>
+        function triggerCoinAnimation() {
+            const coins = document.querySelectorAll('.coin');
+            const bag = document.getElementById('bag');
+            const button = document.getElementById('btnNew');
+            const buttonRect = button.getBoundingClientRect(); // Получаем позицию кнопки
+
+            coins.forEach((coin, index) => {
+                coin.style.opacity = 1; // Показать монеты, когда начинается анимация
+                coin.style.animation = `shootCoins 1s forwards ${index * 0.1}s ease-out`;
+
+                // Задаем положение монет, чтобы они падали из кнопки
+                const coinLeft = buttonRect.left + (buttonRect.width / 2) - 20; // Положение по X (центр кнопки)
+                coin.style.left = `${coinLeft + (Math.random() * 40 - 20)}px`; // Случайное смещение по X
+                coin.style.top = `${buttonRect.top + buttonRect.height}px`; // Задаем начальное положение Y (ниже кнопки)
+
+                // Устанавливаем анимацию
+                coin.style.transform = `translateY(0) scale(0.5)`; // Начальное состояние
+                coin.offsetHeight; // Принудительно перерисовываем элемент, чтобы анимация заработала
+                coin.style.transform = `translateY(180px) scale(1)`; // Конечное состояние
+            });
+
+            // Перенаправление на новую страницу после завершения анимации
+            setTimeout(() => {
+                goToNewPage();
+            }, 1500); // Задержка 1.5 секунды, чтобы дожить до завершения анимации
+        }
+
+        function goToNewPage() {
+            window.location.href = "secondpage.html"; // Замените на нужный вам URL
+        }
+    </script>
+
+</body>
+</html>
